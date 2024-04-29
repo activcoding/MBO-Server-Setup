@@ -40,7 +40,9 @@ check_file() {
 
 check_if_data_folder_exists() {
     if [ ! -d "data" ]; then
-        read -p "The 'data' folder is missing. Do you want to create it? (y/N): " create_data_folder
+        printf "${ORANGE}[!]${NC} The 'data' folder is missing. Do you want to create it? (y/N): "
+        read create_data_folder
+        
         if [ "$create_data_folder" = "y" ]; then
             mkdir data
             data_folder_exists=true
@@ -68,13 +70,20 @@ check_docker_installed() {
 }
 
 download_docker() {
+    apt-get update
+    # Check if curl is already installed
+    if ! command -v curl &> /dev/null; then
+        echo "curl is not installed. Installing curl."
+        apt-get install -y curl
+    fi
+
     # Download Docker
     echo "Downloading Docker..."
     curl -fsSL https://get.docker.com -o get-docker.sh
 
     # Install Docker
     echo "Installing Docker..."
-    sudo sh get-docker.sh
+    sh get-docker.sh
 
     # Clean up
     rm get-docker.sh
@@ -82,6 +91,7 @@ download_docker() {
     # Verify installation
     if command -v docker &> /dev/null; then
         echo "Docker has been installed successfully."
+        docker_is_installed=true
         return 0
     else
         echo "Failed to install Docker."
@@ -136,7 +146,9 @@ check_init_mongo() {
             mongo_init_js_correct=true
             return 0
         else
-             read -p "Do you want to overwrite '$file' with the correct contents? (y/N): " overwrite_file
+            printf "${ORANGE}[!]${NC} Do you want to overwrite '$file' with the correct contents? (y/N): "
+            read overwrite_file
+            
             if [ "$overwrite_file" == "y" ]; then
                 echo "$contents" > "$file"
                 echo "'$file' overwritten with the correct contents."
@@ -150,8 +162,9 @@ check_init_mongo() {
             fi
         fi
     else
-        echo "'$file' does not exist."
-        read -p "Do you want to create '$file' with the correct contents? (y/N): " create_file
+        printf "${ORANGE}[!]${NC} '$file' does not exist. Do you want to create it with the correct contents? (y/N): "
+        read create_file
+        
         if [ "$create_file" == "y" ]; then
             echo "$contents" > "$file"
             echo "'$file' created with the correct contents."
@@ -204,7 +217,8 @@ check_init_mongo
 check_if_data_folder_exists
 
 if [ "$docker_is_installed" = false ]; then
-    read -p "${ORANGE}[!]${NC} Docker isn't installed. Do you want to install Docker? (y/N): " install_docker
+    printf "${ORANGE}[!]${NC} Docker isn't installed. Do you want to install Docker? (y/N): "
+    read install_docker
     if [ "$install_docker" = "y" ]; then
         download_docker
     fi
@@ -227,7 +241,9 @@ if [ ${#missing_folders[@]} -gt 0 ]; then
         echo "$folder"
     done
     echo
-    read -p "Do you want to create missing folders? (y/N): " create_folders
+
+    printf "${ORANGE}[!]${NC} Do you want to create missing folders? (y/N): "
+    read create_folders
 
     if [ "$create_folders" == "y" ]; then
         for folder in "${missing_folders[@]}"; do
@@ -266,7 +282,9 @@ echo #empty line
 if [[ "$docker_compose_yml_exists" = true && "$docker_is_installed" = true ]]; then
     current_version=$(grep 'image: tomludwig/mbo-server:' docker-compose.yml | awk -F ':' '{print $NF}')
     echo "Current mbo-server image version: $current_version"
-    read -p "Do you want to update to a specifc version of the mbo-server image(leave empty for no): " version
+    printf "${ORANGE}[?]${NC} Do you want to update to a specifc version of the mbo-server image(leave empty for no): "
+    read version
+    
     if [ ! "$version" = "" ]; then
         # edit the docker-compose.yml file, replace the version of the mbo-server
         sed -i '' "s|image: tomludwig/mbo-server:.*|image: tomludwig/mbo-server:$version|" docker-compose.yml
