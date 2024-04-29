@@ -1,10 +1,10 @@
 # MBO Server Setup
-This repository contains the essential files and instructions for running the MBO server
+This repository includes all the key files you need to get the MBO server up and running. It also provides clear instructions to guide you through the process. Included in this repository is a script that automates the setup process. This script creates the required files and directories, and installs the necessary software for the server.
 
 ## Usage
 To get started download the repository and run the script to create all necessary files for the server:
 ```bash
-git clone https://github.com/activcoding/MBO-Server-Setup.git && cd MBO-Server-Setup && chmod +x ./MBO-Server-Setup/mbo-init.sh && ./MBO-Server-Setup/mbo-init.sh
+git clone https://github.com/activcoding/MBO-Server-Setup.git && cd MBO-Server-Setup && chmod +x ./mbo-init.sh && ./mbo-init.sh
 ```
 
 > [!IMPORTANT]
