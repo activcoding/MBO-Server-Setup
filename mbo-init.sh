@@ -360,5 +360,5 @@ if [[ "$firebase_admin_json_exists" = true
     echo -e "Where to go form here? You can now run ${green_color}docker-compose up -d${NC} to start the server with all necesary services."
 else
     echo #empty line
-    echo -e "${RED}Not all requirements are met. Please fix the issues above.${NC}"
+    echo -e "${RED}Not all requirements are met. Please fix the issues above and rerun the script with './mbo-init.sh'.${NC}"
 fi
