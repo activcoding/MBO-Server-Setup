@@ -3,7 +3,7 @@ This repository contains the essential files and instructions for running the MB
 
 To get started download the repository:
 ```bash
-git clone https://github.com/activcoding/init-mbo-server.git
+git clone https://github.com/activcoding/MBO-Server-Setup.git
 ```
 Then run the following command to create all necessary files fore the server:
 ```bash
