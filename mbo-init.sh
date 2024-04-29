@@ -357,7 +357,7 @@ if [[ "$firebase_admin_json_exists" = true
 && "$mongo_init_js_correct" = true ]]; then
     echo #empty line
     echo -e "${green_color}All requirements are met.${NC}"
-    echo -e "Where to go form here? You can now run ${green_color}docker-compose up -d${NC} to start the server with all necesary services."
+    echo -e "Where to go form here? First start the Docker daemon with: ${green_color}sudo systemctl start docker${NC}. Then run ${green_color}docker compose up -d${NC} to start the server with all necesary services."
 else
     echo #empty line
     echo -e "${RED}Not all requirements are met. Please fix the issues above and rerun the script with './mbo-init.sh'.${NC}"
