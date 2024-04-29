@@ -1,4 +1,4 @@
-# init-mbo-server
+# MBO Server Setup
 This repository contains the essential files and instructions for running the MBO server
 
 To get started download the repository:
