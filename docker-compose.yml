@@ -1,0 +1,46 @@
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - db-data:/data/db
+    env_file: .env
+
+  mbo-server:
+    build: .
+    image: tomludwig/mbo-server:0.1.1
+    container_name: mbo-server
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    volumes:
+      - substitution-plan-volume:/app/Vertretungen
+      - ./firebase-admin.json:/app/firebase-admin.json
+    env_file:
+      - .env
+
+networks:
+  default:
+    name: mbo-network
+
+volumes:
+  db-data:
+    name: mbo-db-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data
+  substitution-plan-volume:
+    name: mbo-substitution-plan-volume
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./Vertretungen

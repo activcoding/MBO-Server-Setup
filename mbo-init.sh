@@ -263,6 +263,20 @@ fi
 echo #empty line
 echo #empty line
 
+if [[ "$docker_compose_yml_exists" = true && "$docker_is_installed" = true ]]; then
+    current_version=$(grep 'image: tomludwig/mbo-server:' docker-compose.yml | awk -F ':' '{print $NF}')
+    echo "Current mbo-server image version: $current_version"
+    read -p "Do you want to update to a specifc version of the mbo-server image(leave empty for no): " version
+    if [ ! "$version" = "" ]; then
+        # edit the docker-compose.yml file, replace the version of the mbo-server
+        sed -i '' "s|image: tomludwig/mbo-server:.*|image: tomludwig/mbo-server:$version|" docker-compose.yml
+        echo -e "${green_color}Version set to $version${NC}"
+    else
+        echo "No version specified, file stays unchanged."
+        echo #empty line
+    fi
+fi
+
 # If there are missing environment variables, inform the user to create a .env file
 if [ ${#missing_env_vars[@]} -gt 0 ]; then
     echo -e "${ORANGE}[!]${NC} The following environment variables are missing:"
@@ -315,4 +329,18 @@ if [ "$docker_compose_yml_exists" = false ]; then
     echo -e "${RED}[$cross_mark]${NC} The 'docker-compose.yml' file is missing. Follow the instructions in the README to create the file."
 else 
     echo -e "${green_color}[$checkmark]${NC} The 'docker-compose.yml' file is present."
+fi
+
+if [[ "$firebase_admin_json_exists" = true 
+&& "$docker_compose_yml_exists" = true  
+&& "$docker_is_installed" = true 
+&& "$data_folder_exists" = true  
+&& "$mongo_init_js_exists" = true
+&& "$mongo_init_js_correct" = true ]]; then
+    echo #empty line
+    echo -e "${green_color}All requirements are met.${NC}"
+    echo -e "Where to go form here? You can now run ${green_color}docker-compose up -d${NC} to start the server with all necesary services."
+else
+    echo #empty line
+    echo -e "${RED}Not all requirements are met. Please fix the issues above.${NC}"
 fi
