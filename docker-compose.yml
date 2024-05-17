@@ -12,7 +12,7 @@ services:
 
   mbo-server:
     build: .
-    image: tomludwig/mbo-server:0.1.1
+    image: tomludwig/mbo-server:0.1.4
     container_name: mbo-server
     restart: always
     ports:
