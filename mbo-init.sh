@@ -40,7 +40,7 @@ check_file() {
 
 check_if_data_folder_exists() {
     if [ ! -d "data" ]; then
-        printf "${ORANGE}[!]${NC} The 'data' folder is missing. Do you want to create it? (y/N): "
+        printf "${ORANGE}[!]${NC} The 'data' folder is missing. Do you want to create it? (y/n): "
         read create_data_folder
         
         if [ "$create_data_folder" = "y" ]; then
@@ -107,7 +107,7 @@ set_env_variables() {
         touch .env
     fi
 
-    read -p "Do you want to set environment variables now? (y/N): " set_vars
+    read -p "Do you want to set environment variables now? (y/n): " set_vars
     if [ "$set_vars" != "y" ]; then
         echo "Operation aborted."
         return 1
@@ -146,7 +146,7 @@ check_init_mongo() {
             mongo_init_js_correct=true
             return 0
         else
-            printf "${ORANGE}[!]${NC} Do you want to overwrite '$file' with the correct contents? (y/N): "
+            printf "${ORANGE}[!]${NC} Do you want to overwrite '$file' with the correct contents? (y/n): "
             read overwrite_file
             
             if [ "$overwrite_file" == "y" ]; then
@@ -162,7 +162,7 @@ check_init_mongo() {
             fi
         fi
     else
-        printf "${ORANGE}[!]${NC} '$file' does not exist. Do you want to create it with the correct contents? (y/N): "
+        printf "${ORANGE}[!]${NC} '$file' does not exist. Do you want to create it with the correct contents? (y/n): "
         read create_file
         
         if [ "$create_file" == "y" ]; then
@@ -217,7 +217,7 @@ check_init_mongo
 check_if_data_folder_exists
 
 if [ "$docker_is_installed" = false ]; then
-    printf "${ORANGE}[!]${NC} Docker isn't installed. Do you want to install Docker? (y/N): "
+    printf "${ORANGE}[!]${NC} Docker isn't installed. Do you want to install Docker? (y/n): "
     read install_docker
     if [ "$install_docker" = "y" ]; then
         download_docker
@@ -242,7 +242,7 @@ if [ ${#missing_folders[@]} -gt 0 ]; then
     done
     echo
 
-    printf "${ORANGE}[!]${NC} Do you want to create missing folders? (y/N): "
+    printf "${ORANGE}[!]${NC} Do you want to create missing folders? (y/n): "
     read create_folders
 
     if [ "$create_folders" == "y" ]; then
@@ -275,6 +275,9 @@ if [ ${#missing_env_vars[@]} -gt 0 ]; then
     check_env_variable "MONGODB_INITDB_ROOT_PASSWORD"
     check_env_variable "JWT_SECRET"
 fi
+
+# change the read and write permissions of the .env file
+chmod 600 .env
 
 echo #empty line
 echo #empty line
